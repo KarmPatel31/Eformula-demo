@@ -16,14 +16,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') checkPassword();
     });
 
-    function checkPassword() {
-        if (passInput.value === 'admin123') {
+    async function checkPassword() {
+        const input = passInput.value;
+        // Hash for 'admin123'
+        const correctHash = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
+
+        const hash = await sha256(input);
+
+        if (hash === correctHash) {
             loginSection.classList.add('hidden');
             dashboardSection.classList.remove('hidden');
             initDashboard();
         } else {
             errorMsg.classList.remove('hidden');
         }
+    }
+
+    async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
     // --- Data Functions ---
