@@ -61,6 +61,26 @@
   </script>
 </head>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuBtn = document.getElementById("menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener("click", function () {
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      document.querySelectorAll("#mobile-menu a").forEach(link => {
+        link.addEventListener("click", function () {
+          mobileMenu.classList.add("hidden");
+        });
+      });
+    }
+  });
+</script>
+
+
 <body class="bg-primary-bg text-primary-text font-sans">
   <!-- NAVBAR (fixed at top) -->
   <header class="bg-black/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 border-b border-white/10">
@@ -81,7 +101,7 @@
 
       <!-- Mobile menu icon -->
       <div class="md:hidden">
-        <button class="text-white">
+        <button id="menu-btn" class="text-white">
           <!-- Hamburger icon -->
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
@@ -89,6 +109,15 @@
         </button>
       </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-black/95 backdrop-blur border-t border-white/10 px-6 py-6 space-y-4">
+      <a href="#about" class="block text-gray-300 hover:text-vikes-green-neon">About</a>
+      <a href="#team" class="block text-gray-300 hover:text-vikes-green-neon">The Team</a>
+      <a href="#sponsors" class="block text-gray-300 hover:text-vikes-green-neon">Sponsors</a>
+      <a href="#contact" class="block text-gray-300 hover:text-vikes-green-neon">Contact</a>
+    </div>
+
   </header>
 
   <main>
@@ -317,7 +346,7 @@
   <footer class="bg-black py-12 border-t border-white/10 text-center">
     <div class="container mx-auto px-6">
       <p class="text-gray-500">
-        © Formula Vikes Racing — Cleveland State University
+        Powered by Kaysar Mohamed and Karm Patel | © Formula Vikes Racing — Cleveland State University
       </p>
     </div>
   </footer>
