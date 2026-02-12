@@ -64,21 +64,44 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSponsors(items) {
         const container = document.getElementById('sponsors-container');
         if (!container) return;
-        // Always add the "Become a Sponsor" card at the end or keep it separate?
-        // The original HTML had a "Become a Sponsor" button above, and a placeholder card at the end.
-        // We will just render the sponsors here.
 
-        let html = items.map(item => `
-            <div class="h-24 bg-secondary-bg rounded-lg flex items-center justify-center p-4 text-gray-300 shadow-[0_0_30px_8px_${item.glowColor}]">
-                <img src="${item.image}" alt="${item.name}" class="max-h-16 object-contain ${item.classes || ''}" />
+        // Helper to adjust alpha for hover effect (simple string replacement since format is known in data.js)
+        const getHoverColor = (color) => color.replace('0.45', '0.8').replace('0.5', '0.8');
+
+        let html = items.map(item => {
+            const hoverColor = getHoverColor(item.glowColor);
+            return `
+            <div class="group relative rounded-xl overflow-hidden bg-secondary-bg shadow-[0_0_30px_${item.glowColor}] hover:shadow-[0_0_50px_${hoverColor}] transition-all duration-500 border border-white/10 hover:border-white/30 cursor-pointer h-64 flex flex-col">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 opacity-90"></div>
+                
+                <div class="flex-1 flex items-center justify-center p-6 z-0">
+                    <img src="${item.image}" alt="${item.name}" class="max-w-full max-h-32 object-contain transform group-hover:scale-105 transition-transform duration-700 ${item.classes || ''}" />
+                </div>
+
+                <div class="absolute bottom-0 left-0 p-6 z-20 w-full">
+                    <span class="text-gray-400 font-bold uppercase tracking-widest text-xs mb-1 block drop-shadow-md">Sponsor</span>
+                    <h3 class="text-white text-lg font-black uppercase tracking-tighter drop-shadow-xl truncate">${item.name}</h3>
+                </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
 
-        // Append the placeholder card
+        // Placeholder card
+        const placeholderColor = 'rgba(194,24,7,0.45)';
+        const placeholderHover = 'rgba(194,24,7,0.8)';
         html += `
-             <div class="h-24 bg-secondary-bg rounded-lg flex items-center justify-center p-4 text-gray-300 shadow-[0_0_30px_8px_rgba(194,24,7,0.45)]">
-                [ Sponsor Logo ]
-             </div>
+            <div class="group relative rounded-xl overflow-hidden bg-secondary-bg shadow-[0_0_30px_${placeholderColor}] hover:shadow-[0_0_50px_${placeholderHover}] transition-all duration-500 border border-white/10 hover:border-white/30 cursor-pointer h-64 flex flex-col">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 opacity-90"></div>
+                
+                <div class="flex-1 flex items-center justify-center p-6 z-0">
+                    <span class="text-gray-500 text-sm font-bold">[ YOUR LOGO ]</span>
+                </div>
+
+                <div class="absolute bottom-0 left-0 p-6 z-20 w-full">
+                    <span class="text-gray-400 font-bold uppercase tracking-widest text-xs mb-1 block drop-shadow-md">Future Sponsor</span>
+                     <h3 class="text-white text-lg font-black uppercase tracking-tighter drop-shadow-xl truncate">Join Us</h3>
+                </div>
+            </div>
         `;
 
         container.innerHTML = html;
